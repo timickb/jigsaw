@@ -1,6 +1,7 @@
 package me.timickb.jigsaw.domain;
 
 import javafx.application.Platform;
+import me.timickb.jigsaw.domain.enums.FigureRotation;
 
 import java.util.Date;
 import java.util.Timer;
@@ -17,12 +18,7 @@ public class Game {
 
     public Game() {
         field = new Field();
-        figureSpawner = new FigureSpawner();
-        configureSpawner();
-    }
-
-    private void configureSpawner() {
-
+        figureSpawner = new FigureSpawnerCreator().create();
     }
 
     /**

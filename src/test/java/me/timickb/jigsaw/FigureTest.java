@@ -35,7 +35,7 @@ public class FigureTest {
         };
 
         figure.setCells(cells);
-        figure.rotate(FigureRotation.CLOCKWISE);
+        figure.rotate(FigureRotation.CLOCKWISE, 1);
 
         Assertions.assertTrue(checkEqual(rotatedClockwise, figure.getCells()));
     }
@@ -57,7 +57,7 @@ public class FigureTest {
         };
 
         figure.setCells(cells);
-        figure.rotate(FigureRotation.ANTICLOCKWISE);
+        figure.rotate(FigureRotation.ANTICLOCKWISE, 1);
 
         Assertions.assertTrue(checkEqual(rotatedAntiClockwise, figure.getCells()));
     }

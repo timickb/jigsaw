@@ -16,7 +16,11 @@ public class Figure {
     }
 
     public void setCells(boolean[][] cells) {
-        this.cells = cells;
+        for (int i = 0; i < MAX_SIZE; ++i) {
+            for (int j = 0; j < MAX_SIZE; ++j) {
+                this.cells[i][j] = cells[i][j];
+            }
+        }
     }
 
     public boolean[][] getCells() {
@@ -31,25 +35,27 @@ public class Figure {
         return cells[row][col];
     }
 
-    public void rotate(FigureRotation rotation) {
-        boolean[][] newCells = new boolean[MAX_SIZE][MAX_SIZE];
+    public void rotate(FigureRotation rotation, int times) {
+        for (int round = 0; round < times; ++round) {
+            boolean[][] newCells = new boolean[MAX_SIZE][MAX_SIZE];
 
-        if (rotation == FigureRotation.CLOCKWISE) {
-            for (int i = 0; i < MAX_SIZE; ++i) {
-                for (int j = 0; j < MAX_SIZE; ++j) {
-                    newCells[i][j] = cells[MAX_SIZE - j - 1][i];
+            if (rotation == FigureRotation.CLOCKWISE) {
+                for (int i = 0; i < MAX_SIZE; ++i) {
+                    for (int j = 0; j < MAX_SIZE; ++j) {
+                        newCells[i][j] = cells[MAX_SIZE - j - 1][i];
+                    }
                 }
             }
-        }
-        if (rotation == FigureRotation.ANTICLOCKWISE) {
-            for (int i = 0; i < MAX_SIZE; ++i) {
-                for (int j = 0; j < MAX_SIZE; ++j) {
-                    newCells[i][j] = cells[j][MAX_SIZE - i - 1];
+            if (rotation == FigureRotation.ANTICLOCKWISE) {
+                for (int i = 0; i < MAX_SIZE; ++i) {
+                    for (int j = 0; j < MAX_SIZE; ++j) {
+                        newCells[i][j] = cells[j][MAX_SIZE - i - 1];
+                    }
                 }
             }
-        }
 
-        this.cells = newCells;
+            this.cells = newCells;
+        }
     }
 
     public void reflect(FigureReflection reflection) {
