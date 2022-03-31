@@ -15,18 +15,19 @@ public class JigsawApplication extends Application {
     public static final String STYLE_RESOURCE = "style.css";
     public static final String MARKUP_RESOURCE = "main-view.fxml";
     public static final String ICON_RESOURCE = "icon.png";
+    public static final String APP_TITLE = "Игра \"Пазл\"";
 
     @Override
     public void start(Stage stage) throws IOException {
-        String css = getClass().getResource(STYLE_RESOURCE).toExternalForm();
+        String styleSheet = getClass().getResource(STYLE_RESOURCE).toExternalForm();
 
         FXMLLoader mainViewLoader = new FXMLLoader(getClass().getResource(MARKUP_RESOURCE));
         Scene mainScene = new Scene(mainViewLoader.load(), WINDOW_WIDTH, WINDOW_HEIGHT);
-        mainScene.getStylesheets().add(css);
+        mainScene.getStylesheets().add(styleSheet);
 
         stage.setScene(mainScene);
         stage.setResizable(false);
-        stage.setTitle("Игра \"Пазл\"");
+        stage.setTitle(APP_TITLE);
         stage.getIcons().add(new Image(getClass().getResourceAsStream(ICON_RESOURCE)));
 
         stage.show();

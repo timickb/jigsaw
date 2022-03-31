@@ -16,7 +16,20 @@
     -fx-text-fill: white;
     -fx-font-size: 17pt;
     -fx-font-weight: bold;
-    -fx-min-width: 200px;
+    -fx-min-width: 240px;
+}
+
+.button {
+    -fx-padding: 15px;
+    -fx-text-fill: white;
+    -fx-font-size: 17pt;
+    -fx-font-weight: bold;
+    -fx-min-width: 240px;
+}
+
+#endButton {
+    .button;
+    -fx-background-color: deepskyblue;
 }
 
 #startButton:hover {
@@ -24,13 +37,8 @@
 }
 
 #exitButton {
-    -fx-min-width: 200px;
-    -fx-padding: 15px;
+    .button;
     -fx-background-color: #bd4141;
-    -fx-text-fill: white;
-    -fx-font-size: 17pt;
-    -fx-border-radius: 12px;
-    -fx-font-weight: bold;
 }
 
 #exitButton:hover {
