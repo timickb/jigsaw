@@ -3,13 +3,25 @@ package me.timickb.jigsaw.domain;
 import me.timickb.jigsaw.domain.enums.FigureReflection;
 import me.timickb.jigsaw.domain.enums.FigureRotation;
 
+/**
+ * FigureSpawner creation manager.
+ */
 public class FigureSpawnerCreator {
+    /** Generates a set of figures and adds
+     * it to new spawner.
+     * @return Generated spawner.
+     */
     public FigureSpawner create() {
         FigureSpawner spawner = new FigureSpawner();
 
         createFirstType(spawner);
         createSecondType(spawner);
         createThirdType(spawner);
+        createFourthType(spawner);
+        createFifthType(spawner);
+        createSixthType(spawner);
+        createSeventhType(spawner);
+        createEighthType(spawner);
 
         return spawner;
     }
@@ -181,6 +193,53 @@ public class FigureSpawnerCreator {
                 {false, true, false},
                 {false, false, false}
         };
+
+        Figure normal = new Figure();
+        Figure rotated1 = new Figure();
+        Figure rotated2 = new Figure();
+        Figure rotated3 = new Figure();
+
+        normal.setCells(scheme);
+        rotated1.setCells(scheme);
+        rotated2.setCells(scheme);
+        rotated3.setCells(scheme);
+
+        rotated1.rotate(FigureRotation.CLOCKWISE, 1);
+        rotated2.rotate(FigureRotation.CLOCKWISE, 2);
+        rotated3.rotate(FigureRotation.CLOCKWISE, 3);
+
+        spawner.addFigure(normal);
+        spawner.addFigure(rotated1);
+        spawner.addFigure(rotated2);
+        spawner.addFigure(rotated3);
+    }
+
+    // То, что обычно строят в майнкрафте, но короче
+    private void createEighthType(FigureSpawner spawner) {
+        boolean[][] scheme = {
+                {false, false, false},
+                {false, true, false},
+                {true, true, true}
+        };
+
+        Figure normal = new Figure();
+        Figure rotated1 = new Figure();
+        Figure rotated2 = new Figure();
+        Figure rotated3 = new Figure();
+
+        normal.setCells(scheme);
+        rotated1.setCells(scheme);
+        rotated2.setCells(scheme);
+        rotated3.setCells(scheme);
+
+        rotated1.rotate(FigureRotation.CLOCKWISE, 1);
+        rotated2.rotate(FigureRotation.CLOCKWISE, 2);
+        rotated3.rotate(FigureRotation.CLOCKWISE, 3);
+
+        spawner.addFigure(normal);
+        spawner.addFigure(rotated1);
+        spawner.addFigure(rotated2);
+        spawner.addFigure(rotated3);
     }
 
 }
