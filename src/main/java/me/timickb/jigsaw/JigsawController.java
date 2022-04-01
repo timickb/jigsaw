@@ -67,13 +67,16 @@ public class JigsawController implements Initializable {
         // какой-нибудь клетки поля.
         // Эту координату передаем в game.placeFigure
         // Радуемся
-        Pair<Integer, Integer> cellData = computeCoords();
+        Pair<Long, Long> cellData = computeCoords();
 
         if (cellData == null) {
             return;
         }
 
-        if (game.placeFigure(cellData.getValue(), cellData.getKey())) {
+        int rowIndex = cellData.getValue().intValue();
+        int columnIndex = cellData.getKey().intValue();
+
+        if (game.placeFigure(rowIndex, columnIndex)) {
             renderField();
             spawnFigure();
         }
@@ -140,7 +143,7 @@ public class JigsawController implements Initializable {
     }
 
     // Считает координаты ближайшей подходящей ячейки
-    protected Pair<Integer, Integer> computeCoords() {
+    protected Pair<Long, Long> computeCoords() {
         Bounds fieldInScene = fieldView.localToScene(fieldView.getBoundsInLocal());
         Bounds figureInScene = figureView.localToScene(figureView.getBoundsInLocal());
 
@@ -150,14 +153,8 @@ public class JigsawController implements Initializable {
         double figureX = figureInScene.getMinX();
         double figureY = figureInScene.getMinY();
 
-        int columnIndex = (int)(figureX - fieldX) / (Field.CELL_SIZE + 5);
-        int rowIndex = (int)(figureY - fieldY) / (Field.CELL_SIZE + 5);
-
-        System.out.println("Row: %s. Column: %s".formatted(rowIndex, columnIndex));
-
-        System.out.println(fieldX + " " + fieldY);
-        System.out.println(figureX + " " + figureY);
-        System.out.println();
+        long columnIndex = Math.round((figureX - fieldX) / (Field.CELL_SIZE + 5));
+        long rowIndex = Math.round((figureY - fieldY) / (Field.CELL_SIZE + 5));
 
         return new Pair<>(rowIndex, columnIndex);
     }

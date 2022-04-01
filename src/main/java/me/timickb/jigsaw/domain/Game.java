@@ -52,9 +52,7 @@ public class Game {
         // Check possibility
         for (int i = 0; i < Figure.MAX_SIZE; ++i) {
             for (int j = 0; j < Figure.MAX_SIZE; ++j) {
-                if (currentFigure.getCell(i, j)
-                        && fieldRow + i >= 0 && fieldCol + j >= 0
-                        && fieldRow + i < Field.SIZE && fieldCol + j < Field.SIZE) {
+                if (currentFigure.getCell(i, j) && isBoundsValid(fieldRow + i, fieldCol + j)) {
                     if (field.getCell(fieldRow + i, fieldCol + j)) {
                         return false;
                     }
@@ -64,12 +62,16 @@ public class Game {
         // Place
         for (int i = 0; i < Figure.MAX_SIZE; ++i) {
             for (int j = 0; j < Figure.MAX_SIZE; ++j) {
-                if (currentFigure.getCell(i, j)) {
+                if (currentFigure.getCell(i, j) && isBoundsValid(fieldRow + i, fieldCol + j)) {
                     field.setCell(fieldRow + i, fieldCol + j, true);
                 }
             }
         }
         return true;
+    }
+
+    private boolean isBoundsValid(int row, int col) {
+        return row >= 0 && col >= 0 && row < Field.SIZE && col < Field.SIZE;
     }
 
     /**
