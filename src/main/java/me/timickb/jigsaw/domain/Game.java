@@ -1,10 +1,9 @@
 package me.timickb.jigsaw.domain;
 
-import javafx.application.Platform;
-import me.timickb.jigsaw.domain.enums.FigureRotation;
+
+import me.timickb.jigsaw.exceptions.FigureSpawnerException;
 
 import java.util.Date;
-import java.util.Timer;
 
 /**
  * Represents the Jigsaw game.
@@ -12,6 +11,7 @@ import java.util.Timer;
 public class Game {
     private Field field;
     private FigureSpawner figureSpawner;
+    private Figure currentFigure;
     private Date startTime;
     private boolean goingOn;
     private int score;
@@ -30,7 +30,14 @@ public class Game {
         goingOn = true;
         score = 0;
         startTime = new Date();
+    }
 
+    public void updateFigure() {
+        try {
+            currentFigure = figureSpawner.getNext();
+        } catch (FigureSpawnerException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -46,5 +53,17 @@ public class Game {
 
     public boolean isGoingOn() {
         return goingOn;
+    }
+
+    public FigureSpawner getFigureSpawner() {
+        return figureSpawner;
+    }
+
+    public Figure getCurrentFigure() {
+        return currentFigure;
+    }
+
+    public Field getField() {
+        return field;
     }
 }

@@ -9,6 +9,13 @@
     -fx-font-weight: bold;
 }
 
+#spawnerPaneContainer {
+    -fx-background-color: white;
+    -fx-border-width: 2;
+    -fx-border-color: black;
+    -fx-start-margin: 10px;
+}
+
 
 #startButton {
     -fx-padding: 15px;

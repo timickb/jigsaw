@@ -36,7 +36,7 @@
         </HBox>
     </top>
     <left>
-        <GridPane styleClass="field" vgap="5" hgap="5">
+        <GridPane styleClass="field" vgap="15" hgap="5">
             <padding>
                 <Insets bottom="10.0" left="15.0" right="15.0" top="10.0"/>
             </padding>
@@ -52,6 +52,18 @@
                     GridPane.rowIndex="1">
                 Выйти
             </Button>
+            <HBox fx:id="spawnerPaneContainer"
+                  GridPane.columnIndex="0"
+                  GridPane.rowIndex="2">
+                <padding>
+                    <Insets bottom="5.0" left="15.0" right="15.0" top="5.0"/>
+                </padding>
+                <Pane
+                        minWidth="50"
+                        minHeight="50"
+                        fx:id="spawnerPane">
+                </Pane>
+            </HBox>
         </GridPane>
     </left>
     <right>

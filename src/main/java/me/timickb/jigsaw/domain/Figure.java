@@ -5,6 +5,7 @@ import me.timickb.jigsaw.domain.enums.FigureRotation;
 import me.timickb.jigsaw.exceptions.CellSettingException;
 
 import java.math.MathContext;
+import java.util.Arrays;
 
 public class Figure {
     public static final int MAX_SIZE = 3;
@@ -77,5 +78,17 @@ public class Figure {
         }
 
         this.cells = newCells;
+    }
+
+    @Override
+    public String toString() {
+        String result = "";
+        for (int i = 0; i < MAX_SIZE; ++i) {
+            for (int j = 0 ; j < MAX_SIZE; ++j) {
+                result += (cells[i][j] ? "1 " : "0 ");
+            }
+            result += '\n';
+        }
+        return result;
     }
 }

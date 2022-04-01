@@ -13,7 +13,7 @@ public class JigsawApplication extends Application {
     public static final int WINDOW_HEIGHT = 550;
 
     public static final String STYLE_RESOURCE = "style.css";
-    public static final String MARKUP_RESOURCE = "main-view.fxml";
+    public static final String MARKUP_RESOURCE = "views/main-view.fxml";
     public static final String ICON_RESOURCE = "icon.png";
     public static final String APP_TITLE = "Игра \"Пазл\"";
 
