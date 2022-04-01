@@ -43,6 +43,7 @@ public class Game {
     /**
      * Checks the possibility to place currentFigure
      * with top-left cell in (fieldRpw, fieldCol).
+     *
      * @param fieldRow Top-left field cell row index
      * @param fieldCol Top-left field cell column index
      * @return Possibility of placement.
@@ -51,7 +52,9 @@ public class Game {
         // Check possibility
         for (int i = 0; i < Figure.MAX_SIZE; ++i) {
             for (int j = 0; j < Figure.MAX_SIZE; ++j) {
-                if (currentFigure.getCell(i, j)) {
+                if (currentFigure.getCell(i, j)
+                        && fieldRow + i >= 0 && fieldCol + j >= 0
+                        && fieldRow + i < Field.SIZE && fieldCol + j < Field.SIZE) {
                     if (field.getCell(fieldRow + i, fieldCol + j)) {
                         return false;
                     }
@@ -71,13 +74,14 @@ public class Game {
 
     /**
      * End the game.
+     *
      * @return The game result.
      */
     public GameResult end() {
         if (!goingOn) return null;
         goingOn = false;
         long millis = new Date().getTime() - startTime.getTime();
-        return new GameResult(score, (int)(millis / 1000));
+        return new GameResult(score, (int) (millis / 1000));
     }
 
     public boolean isGoingOn() {

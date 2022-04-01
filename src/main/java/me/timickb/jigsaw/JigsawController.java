@@ -65,14 +65,15 @@ public class JigsawController implements Initializable {
         // Берем левую верхнюю координату figureView.
         // Находим ближайшую к ней координату левого-верхнего угла
         // какой-нибудь клетки поля.
-        // Эту координату переда
-        // ем в game.placeFigure
+        // Эту координату передаем в game.placeFigure
         // Радуемся
         Pair<Integer, Integer> cellData = computeCoords();
 
-        System.out.println("handle place");
+        if (cellData == null) {
+            return;
+        }
+
         if (game.placeFigure(cellData.getValue(), cellData.getKey())) {
-            System.out.println("place!");
             renderField();
             spawnFigure();
         }
@@ -148,10 +149,6 @@ public class JigsawController implements Initializable {
 
         double figureX = figureInScene.getMinX();
         double figureY = figureInScene.getMinY();
-
-        if (figureX < fieldX || figureY < fieldY) {
-            return null;
-        }
 
         int columnIndex = (int)(figureX - fieldX) / (Field.CELL_SIZE + 5);
         int rowIndex = (int)(figureY - fieldY) / (Field.CELL_SIZE + 5);
