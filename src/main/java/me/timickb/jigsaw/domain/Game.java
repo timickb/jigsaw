@@ -41,6 +41,35 @@ public class Game {
     }
 
     /**
+     * Checks the possibility to place currentFigure
+     * with top-left cell in (fieldRpw, fieldCol).
+     * @param fieldRow Top-left field cell row index
+     * @param fieldCol Top-left field cell column index
+     * @return Possibility of placement.
+     */
+    public boolean placeFigure(int fieldRow, int fieldCol) {
+        // Check possibility
+        for (int i = 0; i < Figure.MAX_SIZE; ++i) {
+            for (int j = 0; j < Figure.MAX_SIZE; ++j) {
+                if (currentFigure.getCell(i, j)) {
+                    if (field.getCell(fieldRow + i, fieldCol + j)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        // Place
+        for (int i = 0; i < Figure.MAX_SIZE; ++i) {
+            for (int j = 0; j < Figure.MAX_SIZE; ++j) {
+                if (currentFigure.getCell(i, j)) {
+                    field.setCell(fieldRow + i, fieldCol + j, true);
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
      * End the game.
      * @return The game result.
      */

@@ -2,18 +2,17 @@ package me.timickb.jigsaw;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Pair;
 import me.timickb.jigsaw.domain.Field;
 import me.timickb.jigsaw.domain.Figure;
 import me.timickb.jigsaw.domain.Game;
-import me.timickb.jigsaw.exceptions.FigureSpawnerException;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -33,7 +32,6 @@ public class JigsawController implements Initializable {
 
     private Game game;
     private Group figureView;
-    private DraggableMaker draggableMaker;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -42,21 +40,42 @@ public class JigsawController implements Initializable {
         });
 
         startButton.setOnMouseClicked(event -> {
+            spawnFigure();
             if (game.isGoingOn()) {
-                startGame();
+                // start game
             } else {
-                endGame();
+                // end game
             }
         });
+
         game = new Game();
         figureView = new Group();
-        figureView.setViewOrder(1000);
-        draggableMaker = new DraggableMaker();
-        draggableMaker.makeDraggable(figureView);
+        new DraggableMaker().makeDraggable(figureView);
+
+        figureView.setOnMouseReleased(e -> handlePlaceFigure());
 
         renderField();
         renderSpawnArea();
-        spawnFigure();
+    }
+
+    protected void handlePlaceFigure() {
+        if (game.getCurrentFigure() == null) {
+            return;
+        }
+        // Берем левую верхнюю координату figureView.
+        // Находим ближайшую к ней координату левого-верхнего угла
+        // какой-нибудь клетки поля.
+        // Эту координату переда
+        // ем в game.placeFigure
+        // Радуемся
+        Pair<Integer, Integer> cellData = computeCoords();
+
+        System.out.println("handle place");
+        if (game.placeFigure(cellData.getValue(), cellData.getKey())) {
+            System.out.println("place!");
+            renderField();
+            spawnFigure();
+        }
     }
 
     protected void spawnFigure() {
@@ -84,7 +103,7 @@ public class JigsawController implements Initializable {
                 cell.setTranslateY((Field.CELL_SIZE + gap) * j);
                 if (game.getCurrentFigure() != null
                         && game.getCurrentFigure().getCell(i, j)) {
-                    cell.setFill(Color.BLACK);
+                    cell.setFill(Color.BLUEVIOLET);
                 }
                 figureView.getChildren().add(cell);
             }
@@ -95,15 +114,17 @@ public class JigsawController implements Initializable {
         spawnerPane.getChildren().add(figureView);
     }
 
+    // Перерисовывает поле 9x9
     protected void renderField() {
         for (int i = 0; i < Field.SIZE; i++) {
             for (int j = 0; j < Field.SIZE; ++j) {
-                fieldView.getChildren().add(getCellRectangle(i, j));
+                fieldView.getChildren().add(renderFieldCell(i, j));
             }
         }
     }
 
-    protected Rectangle getCellRectangle(int row, int col) {
+    // Рисует конкретную ячейку поля
+    protected Rectangle renderFieldCell(int row, int col) {
         Rectangle cell = new Rectangle();
         cell.setWidth(Field.CELL_SIZE);
         cell.setHeight(Field.CELL_SIZE);
@@ -117,31 +138,30 @@ public class JigsawController implements Initializable {
         return cell;
     }
 
-    protected Rectangle getSpawnerCellRectangle(int row, int col) {
-        Rectangle cell = new Rectangle();
-        cell.setWidth(Field.CELL_SIZE);
-        cell.setHeight(Field.CELL_SIZE);
-        cell.setFill(Paint.valueOf("white"));
-        GridPane.setConstraints(cell, row, col);
+    // Считает координаты ближайшей подходящей ячейки
+    protected Pair<Integer, Integer> computeCoords() {
+        Bounds fieldInScene = fieldView.localToScene(fieldView.getBoundsInLocal());
+        Bounds figureInScene = figureView.localToScene(figureView.getBoundsInLocal());
 
-        return cell;
-    }
+        double fieldX = fieldInScene.getMinX() + fieldView.getPadding().getLeft();
+        double fieldY = fieldInScene.getMinY() + fieldView.getPadding().getTop();
 
-    protected void startGame() {
-        game.start();
-        switchStartButton();
-    }
+        double figureX = figureInScene.getMinX();
+        double figureY = figureInScene.getMinY();
 
-    protected void endGame() {
-        game.end();
-        switchStartButton();
-    }
-
-    protected void switchStartButton() {
-        if(game.isGoingOn()) {
-            startButton.setText("Завершить игру");
-        } else {
-            startButton.setText("Новая игра");
+        if (figureX < fieldX || figureY < fieldY) {
+            return null;
         }
+
+        int columnIndex = (int)(figureX - fieldX) / (Field.CELL_SIZE + 5);
+        int rowIndex = (int)(figureY - fieldY) / (Field.CELL_SIZE + 5);
+
+        System.out.println("Row: %s. Column: %s".formatted(rowIndex, columnIndex));
+
+        System.out.println(fieldX + " " + fieldY);
+        System.out.println(figureX + " " + figureY);
+        System.out.println();
+
+        return new Pair<>(rowIndex, columnIndex);
     }
 }
