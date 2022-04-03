@@ -28,9 +28,16 @@ class GameTest {
 
     @Test
     void end() {
+        Game game = new Game(new Timeline());
+        game.start();
+        game.end();
+        Assertions.assertFalse(game.isGoingOn());
     }
 
     @Test
     void incTime() {
+        Game game = new Game(new Timeline());
+        game.incTime();
+        Assertions.assertEquals(game.getSeconds(), 1);
     }
 }

@@ -3,6 +3,9 @@ package me.timickb.jigsaw.domain;
 import me.timickb.jigsaw.domain.enums.FigureReflection;
 import me.timickb.jigsaw.domain.enums.FigureRotation;
 
+/**
+ * Represents a game figure.
+ */
 public class Figure {
     public static final int MAX_SIZE = 3;
 

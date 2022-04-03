@@ -5,6 +5,7 @@ import me.timickb.jigsaw.domain.enums.FigureRotation;
 import me.timickb.jigsaw.exceptions.FigureFormatException;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * FigureSpawner creation manager.
@@ -16,13 +17,22 @@ public class FigureSpawnerCreator {
      */
     public FigureSpawner createFromDefaultFiles() {
         FigureSpawner spawner = new FigureSpawner();
-        for (int i = 1; i <= 31; ++i) {
-            try {
-                spawner.addFigureFromFile(new File(getClass().getClassLoader()
-                        .getResource("default-figures/f%d.txt".formatted(i)).getFile()));
-            } catch (FigureFormatException e) {
-                e.printStackTrace();
+
+        try {
+            int amount = new File(getClass().getClassLoader()
+                    .getResource("default-figures")
+                    .getFile()).listFiles().length;
+
+            for (int i = 1; i <= amount; ++i) {
+                try {
+                    spawner.addFigureFromFile(new File(getClass().getClassLoader()
+                            .getResource("default-figures/f%d.txt".formatted(i)).getFile()));
+                } catch (FigureFormatException e) {
+                    e.printStackTrace();
+                }
             }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
         return spawner;
     }
