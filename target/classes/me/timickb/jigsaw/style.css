@@ -6,7 +6,6 @@
     -fx-text-fill: white;
     -fx-font-size: 21pt;
     -fx-padding: 5px;
-    -fx-font-weight: bold;
 }
 
 #spawnerPaneContainer {
@@ -58,4 +57,5 @@
 
 #header {
     -fx-content-display: flex;
+    -fx-alignment: space-between;
 }

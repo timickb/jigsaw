@@ -18,8 +18,11 @@ public class Field {
         cells[row][col] = value;
     }
 
-    public boolean place(Figure figure, int topLeftRow, int topLeftCol) {
-
-        return true;
+    public void clear() {
+        for (int i = 0; i < SIZE; ++i) {
+            for (int j = 0; j < SIZE; ++j) {
+                cells[i][j] = false;
+            }
+        }
     }
 }

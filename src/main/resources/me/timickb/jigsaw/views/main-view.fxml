@@ -1,39 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.shape.Rectangle?>
-<?import impl.org.controlsfx.skin.GridRow?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="me.timickb.jigsaw.JigsawController"
             prefHeight="400.0" prefWidth="600.0">
 
     <top>
-        <HBox style="-fx-background-color: #336699" styleClass="header">
+        <BorderPane style="-fx-background-color: #336699" styleClass="header">
             <padding>
                 <Insets bottom="10.0" left="15.0" right="15.0" top="10.0"/>
             </padding>
-            <Label
-                    fx:id="pointCountView"
-                    styleClass="label"
-                    GridPane.columnIndex="0"
-                    GridPane.rowIndex="0">
-                Ходы: 0
-            </Label>
-            <Label
-                    fx:id="timeView"
-                    styleClass="label"
-                    GridPane.columnIndex="0"
-                    GridPane.rowIndex="0">
-                Время: 0:00
-            </Label>
-        </HBox>
+            <left>
+                <Label
+                        fx:id="pointCountView"
+                        styleClass="label"
+                        GridPane.columnIndex="0"
+                        GridPane.rowIndex="0">
+                    Ходы: 0
+                </Label>
+            </left>
+            <right>
+                <Label
+                        fx:id="timeView"
+                        styleClass="label"
+                        GridPane.columnIndex="0"
+                        GridPane.rowIndex="0">
+                    Время: 0 сек.
+                </Label>
+            </right>
+        </BorderPane>
     </top>
     <left>
         <GridPane styleClass="field" vgap="15" hgap="5">

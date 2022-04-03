@@ -1,24 +1,31 @@
 package me.timickb.jigsaw;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Bounds;
 import javafx.scene.Group;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 import javafx.util.Pair;
+import me.timickb.jigsaw.algorithm.Algorithm;
 import me.timickb.jigsaw.domain.Field;
 import me.timickb.jigsaw.domain.Figure;
 import me.timickb.jigsaw.domain.Game;
+import me.timickb.jigsaw.domain.GameResult;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * App controller.
+ * Responsible for views rendering.
  */
 public class JigsawController implements Initializable {
     @FXML
@@ -29,62 +36,76 @@ public class JigsawController implements Initializable {
     private Button startButton;
     @FXML
     private Pane spawnerPane;
+    @FXML
+    private Label timeView;
+    @FXML
+    private Label pointCountView;
 
     private Game game;
     private Group figureView;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        exitButton.setOnMouseClicked(event -> {
-            javafx.application.Platform.exit();
-        });
+        Timeline gameTimer = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+            timeView.setText("Время: %d сек.".formatted(game.getSeconds()));
+            game.incTime();
+        }));
+        gameTimer.setCycleCount(Animation.INDEFINITE);
 
-        startButton.setOnMouseClicked(event -> {
-            spawnFigure();
-            if (game.isGoingOn()) {
-                // start game
-            } else {
-                // end game
-            }
-        });
+        exitButton.setOnMouseClicked(event -> javafx.application.Platform.exit());
+        startButton.setOnMouseClicked(event -> handleStartButtonClick());
 
-        game = new Game();
+        game = new Game(gameTimer);
+
         figureView = new Group();
         new DraggableMaker().makeDraggable(figureView);
-
         figureView.setOnMouseReleased(e -> handlePlaceFigure());
 
         renderField();
         renderSpawnArea();
     }
 
+    protected void handleStartButtonClick() {
+        if (!game.isGoingOn()) {
+            game.updateFigure();
+            renderSpawnArea();
+            game.start();
+            startButton.setText("Завершить игру");
+        } else {
+            GameResult result = game.end();
+            renderField();
+
+            startButton.setText("Новая игра");
+            timeView.setText("Время: 0 сек.");
+            pointCountView.setText("Ходы: 0");
+            figureView.getChildren().clear();
+
+            showGameEndDialog(result);
+        }
+    }
+
     protected void handlePlaceFigure() {
         if (game.getCurrentFigure() == null) {
             return;
         }
-        // Берем левую верхнюю координату figureView.
-        // Находим ближайшую к ней координату левого-верхнего угла
-        // какой-нибудь клетки поля.
-        // Эту координату передаем в game.placeFigure
-        // Радуемся
-        Pair<Long, Long> cellData = computeCoords();
 
+        Pair<Long, Long> cellData = Algorithm.computeNearestCell(fieldView, figureView);
         if (cellData == null) {
             return;
         }
 
-        int rowIndex = cellData.getValue().intValue();
-        int columnIndex = cellData.getKey().intValue();
+        int rowIndex = cellData.getKey().intValue();
+        int columnIndex = cellData.getValue().intValue();
 
         if (game.placeFigure(rowIndex, columnIndex)) {
             renderField();
-            spawnFigure();
+            game.updateFigure();
+            renderSpawnArea();
+            pointCountView.setText("Ходы: " + game.getScore());
+        } else {
+            figureView.setTranslateX(0);
+            figureView.setTranslateY(0);
         }
-    }
-
-    protected void spawnFigure() {
-        game.updateFigure();
-        renderSpawnArea();
     }
 
     // Перерисовывает область, в которой появляются фигуры.
@@ -97,6 +118,8 @@ public class JigsawController implements Initializable {
         spawnerPane.setMinHeight(areaHeight);
 
         figureView.getChildren().clear();
+        figureView.setTranslateX(0);
+        figureView.setTranslateY(0);
         spawnerPane.getChildren().clear();
 
         for (int i = 0; i < Figure.MAX_SIZE; ++i) {
@@ -118,7 +141,7 @@ public class JigsawController implements Initializable {
         spawnerPane.getChildren().add(figureView);
     }
 
-    // Перерисовывает поле 9x9
+    // Перерисовывает игровое поле
     protected void renderField() {
         for (int i = 0; i < Field.SIZE; i++) {
             for (int j = 0; j < Field.SIZE; ++j) {
@@ -142,20 +165,16 @@ public class JigsawController implements Initializable {
         return cell;
     }
 
-    // Считает координаты ближайшей подходящей ячейки
-    protected Pair<Long, Long> computeCoords() {
-        Bounds fieldInScene = fieldView.localToScene(fieldView.getBoundsInLocal());
-        Bounds figureInScene = figureView.localToScene(figureView.getBoundsInLocal());
-
-        double fieldX = fieldInScene.getMinX() + fieldView.getPadding().getLeft();
-        double fieldY = fieldInScene.getMinY() + fieldView.getPadding().getTop();
-
-        double figureX = figureInScene.getMinX();
-        double figureY = figureInScene.getMinY();
-
-        long columnIndex = Math.round((figureX - fieldX) / (Field.CELL_SIZE + 5));
-        long rowIndex = Math.round((figureY - fieldY) / (Field.CELL_SIZE + 5));
-
-        return new Pair<>(rowIndex, columnIndex);
+    /**
+     * Shows a dialog with game results.
+     * @param result Game result object
+     */
+    protected void showGameEndDialog(GameResult result) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Сообщение");
+        alert.setHeaderText("Игра завершена");
+        alert.setContentText("Количество ходов: %s; Прошло времени: %s секунд"
+                .formatted(result.score(), result.seconds()));
+        alert.showAndWait();
     }
 }

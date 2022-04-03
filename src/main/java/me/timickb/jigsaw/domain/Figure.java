@@ -2,10 +2,6 @@ package me.timickb.jigsaw.domain;
 
 import me.timickb.jigsaw.domain.enums.FigureReflection;
 import me.timickb.jigsaw.domain.enums.FigureRotation;
-import me.timickb.jigsaw.exceptions.CellSettingException;
-
-import java.math.MathContext;
-import java.util.Arrays;
 
 public class Figure {
     public static final int MAX_SIZE = 3;
@@ -16,6 +12,10 @@ public class Figure {
         cells = new boolean[MAX_SIZE][MAX_SIZE];
     }
 
+    public Figure(boolean[][] cells) {
+        this.cells = cells;
+    }
+
     public void setCells(boolean[][] cells) {
         for (int i = 0; i < MAX_SIZE; ++i) {
             for (int j = 0; j < MAX_SIZE; ++j) {
@@ -24,18 +24,56 @@ public class Figure {
         }
     }
 
+    /**
+     * Counts filled cells.
+     *
+     * @return Count of filled cells.
+     */
+    public int getCellsCount() {
+        int count = 0;
+        for (int i = 0; i < MAX_SIZE; ++i) {
+            for (int j = 0; j < MAX_SIZE; ++j) {
+                if (cells[i][j]) {
+                    ++count;
+                }
+            }
+        }
+        return count;
+    }
+
+
+    /**
+     * @return Source cell array.
+     */
     public boolean[][] getCells() {
         return cells;
     }
 
+
+    /**
+     * @param row    Row index
+     * @param col    Column index
+     * @param active Cell status
+     */
     public void setCell(int row, int col, boolean active) {
         cells[row][col] = active;
     }
 
+    /**
+     * @param row Row index
+     * @param col Cell index
+     * @return Cell status
+     */
     public boolean getCell(int row, int col) {
         return cells[row][col];
     }
 
+    /**
+     * Rotates the figure.
+     *
+     * @param rotation Rotation direction
+     * @param times    Number of turns
+     */
     public void rotate(FigureRotation rotation, int times) {
         for (int round = 0; round < times; ++round) {
             boolean[][] newCells = new boolean[MAX_SIZE][MAX_SIZE];
@@ -59,6 +97,11 @@ public class Figure {
         }
     }
 
+    /**
+     * Geometrically reflects the figure
+     *
+     * @param reflection Reflection type
+     */
     public void reflect(FigureReflection reflection) {
         boolean[][] newCells = new boolean[MAX_SIZE][MAX_SIZE];
 
@@ -84,7 +127,7 @@ public class Figure {
     public String toString() {
         String result = "";
         for (int i = 0; i < MAX_SIZE; ++i) {
-            for (int j = 0 ; j < MAX_SIZE; ++j) {
+            for (int j = 0; j < MAX_SIZE; ++j) {
                 result += (cells[i][j] ? "1 " : "0 ");
             }
             result += '\n';
