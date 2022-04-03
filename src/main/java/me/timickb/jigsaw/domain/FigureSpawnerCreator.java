@@ -2,11 +2,30 @@ package me.timickb.jigsaw.domain;
 
 import me.timickb.jigsaw.domain.enums.FigureReflection;
 import me.timickb.jigsaw.domain.enums.FigureRotation;
+import me.timickb.jigsaw.exceptions.FigureFormatException;
+
+import java.io.File;
 
 /**
  * FigureSpawner creation manager.
  */
 public class FigureSpawnerCreator {
+    /** Reads default figures from resource directory
+     * and adds it to new spawner.
+     * @return Generated spawner.
+     */
+    public FigureSpawner createFromDefaultFiles() {
+        FigureSpawner spawner = new FigureSpawner();
+        for (int i = 1; i <= 31; ++i) {
+            try {
+                spawner.addFigureFromFile(new File(getClass().getClassLoader()
+                        .getResource("default-figures/f%d.txt".formatted(i)).getFile()));
+            } catch (FigureFormatException e) {
+                e.printStackTrace();
+            }
+        }
+        return spawner;
+    }
     /** Generates a set of figures and adds
      * it to new spawner.
      * @return Generated spawner.

@@ -20,7 +20,7 @@ public class Game {
 
     public Game(Timeline timer) {
         field = new Field();
-        figureSpawner = new FigureSpawnerCreator().create();
+        figureSpawner = new FigureSpawnerCreator().createFromDefaultFiles();
         this.timer = timer;
     }
 
