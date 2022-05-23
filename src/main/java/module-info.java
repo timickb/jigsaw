@@ -9,6 +9,8 @@ module me.timickb.jigsaw {
 
     opens me.timickb.jigsaw to javafx.fxml;
     exports me.timickb.jigsaw;
-    exports me.timickb.jigsaw.algorithm;
-    opens me.timickb.jigsaw.algorithm to javafx.fxml;
+    exports me.timickb.jigsaw.domain;
+    exports me.timickb.jigsaw.domain.enums;
+    exports me.timickb.jigsaw.exceptions;
+    opens me.timickb.jigsaw.domain to javafx.fxml;
 }

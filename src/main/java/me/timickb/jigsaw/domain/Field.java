@@ -7,7 +7,7 @@ public class Field {
     public static final int SIZE = 9;
     public static final int CELL_SIZE = 40;
 
-    private boolean[][] cells;
+    private final boolean[][] cells;
 
     /**
      * Creates a game field.

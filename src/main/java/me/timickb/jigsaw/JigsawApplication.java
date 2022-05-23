@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class JigsawApplication extends Application {
     public static final int WINDOW_WIDTH = 950;
@@ -19,7 +20,7 @@ public class JigsawApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        String styleSheet = getClass().getResource(STYLE_RESOURCE).toExternalForm();
+        String styleSheet = Objects.requireNonNull(getClass().getResource(STYLE_RESOURCE)).toExternalForm();
 
         FXMLLoader mainViewLoader = new FXMLLoader(getClass().getResource(MARKUP_RESOURCE));
         Scene mainScene = new Scene(mainViewLoader.load(), WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -28,7 +29,7 @@ public class JigsawApplication extends Application {
         stage.setScene(mainScene);
         stage.setResizable(false);
         stage.setTitle(APP_TITLE);
-        stage.getIcons().add(new Image(getClass().getResourceAsStream(ICON_RESOURCE)));
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream(ICON_RESOURCE))));
 
         stage.show();
     }

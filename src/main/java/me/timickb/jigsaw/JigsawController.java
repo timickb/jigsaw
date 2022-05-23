@@ -5,6 +5,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -15,7 +16,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import javafx.util.Pair;
-import me.timickb.jigsaw.algorithm.Algorithm;
 import me.timickb.jigsaw.domain.Field;
 import me.timickb.jigsaw.domain.Figure;
 import me.timickb.jigsaw.domain.Game;
@@ -89,10 +89,7 @@ public class JigsawController implements Initializable {
             return;
         }
 
-        Pair<Long, Long> cellData = Algorithm.computeNearestCell(fieldView, figureView);
-        if (cellData == null) {
-            return;
-        }
+        Pair<Long, Long> cellData = computeNearestCell();
 
         int rowIndex = cellData.getKey().intValue();
         int columnIndex = cellData.getValue().intValue();
@@ -112,10 +109,9 @@ public class JigsawController implements Initializable {
     protected void renderSpawnArea() {
         int gap = (int) fieldView.getVgap();
         int areaWidth = Field.CELL_SIZE * 3 + gap * 2;
-        int areaHeight = areaWidth;
 
         spawnerPane.setMinWidth(areaWidth);
-        spawnerPane.setMinHeight(areaHeight);
+        spawnerPane.setMinHeight(areaWidth);
 
         figureView.getChildren().clear();
         figureView.setTranslateX(0);
@@ -176,5 +172,24 @@ public class JigsawController implements Initializable {
         alert.setContentText("Количество ходов: %s; Прошло времени: %s секунд"
                 .formatted(result.score(), result.seconds()));
         alert.showAndWait();
+    }
+
+    /**
+     * @return Integer pair: row and column of computed field cell.
+     */
+    private Pair<Long, Long> computeNearestCell() {
+        Bounds fieldInScene = fieldView.localToScene(fieldView.getBoundsInLocal());
+        Bounds figureInScene = figureView.localToScene(figureView.getBoundsInLocal());
+
+        double fieldX = fieldInScene.getMinX() + fieldView.getPadding().getLeft();
+        double fieldY = fieldInScene.getMinY() + fieldView.getPadding().getTop();
+
+        double figureX = figureInScene.getMinX();
+        double figureY = figureInScene.getMinY();
+
+        long columnIndex = Math.round((figureX - fieldX) / (Field.CELL_SIZE + 5));
+        long rowIndex = Math.round((figureY - fieldY) / (Field.CELL_SIZE + 5));
+
+        return new Pair<>(columnIndex, rowIndex);
     }
 }

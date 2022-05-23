@@ -21,9 +21,7 @@ public class Figure {
 
     public void setCells(boolean[][] cells) {
         for (int i = 0; i < MAX_SIZE; ++i) {
-            for (int j = 0; j < MAX_SIZE; ++j) {
-                this.cells[i][j] = cells[i][j];
-            }
+            System.arraycopy(cells[i], 0, this.cells[i], 0, MAX_SIZE);
         }
     }
 
@@ -117,9 +115,7 @@ public class Figure {
         }
         if (reflection == FigureReflection.VERTICAL) {
             for (int i = 0; i < MAX_SIZE; ++i) {
-                for (int j = 0; j < MAX_SIZE; ++j) {
-                    newCells[i][j] = cells[MAX_SIZE - i - 1][j];
-                }
+                System.arraycopy(cells[MAX_SIZE - i - 1], 0, newCells[i], 0, MAX_SIZE);
             }
         }
 
@@ -128,13 +124,13 @@ public class Figure {
 
     @Override
     public String toString() {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < MAX_SIZE; ++i) {
             for (int j = 0; j < MAX_SIZE; ++j) {
-                result += (cells[i][j] ? "1 " : "0 ");
+                result.append(cells[i][j] ? "1 " : "0 ");
             }
-            result += '\n';
+            result.append('\n');
         }
-        return result;
+        return result.toString();
     }
 }

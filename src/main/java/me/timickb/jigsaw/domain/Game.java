@@ -4,16 +4,14 @@ package me.timickb.jigsaw.domain;
 import javafx.animation.Timeline;
 import me.timickb.jigsaw.exceptions.FigureSpawnerException;
 
-import java.util.Date;
-
 /**
  * Represents the Jigsaw game.
  */
 public class Game {
-    private Field field;
-    private FigureSpawner figureSpawner;
+    private final Field field;
+    private final FigureSpawner figureSpawner;
     private Figure currentFigure;
-    private Timeline timer;
+    private final Timeline timer;
     private boolean goingOn;
     private int score;
     private int seconds;

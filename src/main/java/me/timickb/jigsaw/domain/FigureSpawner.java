@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Random;
 
 public class FigureSpawner {
-    private Random random;
-    private List<Figure> figures;
+    private final Random random;
+    private final List<Figure> figures;
 
     /**
      * Create spawner
