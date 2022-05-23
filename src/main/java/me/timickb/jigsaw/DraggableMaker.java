@@ -13,7 +13,6 @@ public class DraggableMaker {
         node.setOnMousePressed(event -> {
             startX = event.getSceneX() - node.getTranslateX();
             startY = event.getSceneY() - node.getTranslateY();
-            System.out.println("drag started");
         });
         node.setOnMouseDragged(event -> {
            node.setTranslateX(event.getSceneX() - startX);
