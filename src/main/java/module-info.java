@@ -12,5 +12,6 @@ module me.timickb.jigsaw {
     exports me.timickb.jigsaw.domain;
     exports me.timickb.jigsaw.domain.enums;
     exports me.timickb.jigsaw.exceptions;
+    exports me.timickb.jigsaw.messenger;
     opens me.timickb.jigsaw.domain to javafx.fxml;
 }
